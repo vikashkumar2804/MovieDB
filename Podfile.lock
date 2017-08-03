@@ -1,0 +1,18 @@
+PODS:
+  - Alamofire (4.5.0)
+  - Kingfisher (3.10.2)
+  - NVActivityIndicatorView (3.6.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.4)
+  - Kingfisher (~> 3.0)
+  - NVActivityIndicatorView
+
+SPEC CHECKSUMS:
+  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
+  Kingfisher: 7297492bf8cec9b2e2dee3519f2219948580d98e
+  NVActivityIndicatorView: 9f52a7f84bf5c6a798722c450fe3c198e01c56ed
+
+PODFILE CHECKSUM: 7890efa73c0e9e00e0cb4cfdb3ebee251d1fcd66
+
+COCOAPODS: 1.0.1
