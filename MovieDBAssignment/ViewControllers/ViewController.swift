@@ -25,9 +25,10 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     //MARK: - variable declearation -
     var loaderView : NVActivityIndicatorView? = nil
     var loaderBackgrounView : UIView = UIView()
-    var searchString : NSString = ""
-    var moviesArray = NSMutableArray()
-    var dict = NSDictionary()
+    var searchString : String = ""
+    var moviesArray = [Any]()
+//    var dict = NSDictionary()
+    var dict = [String : Any]()
     var pageNO: Int = 0
     var totalPage : Int = 0
     var barButtonClick : Bool = false
@@ -85,16 +86,24 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
                 case .success: print("response: \(response.result)")
                 do {
                     let jsonData = try JSONSerialization.jsonObject(with: response.data! as Data, options: .allowFragments)
-                    self.dict = jsonData as! NSDictionary
-                    self.totalPage = self.dict.object(forKey: "total_pages") as! Int
+                    print("josndata=\(jsonData)")
+                    self.dict = jsonData as! [String : Any]
+//                    print("Dict=\(self.dict)")
+//                    self.totalPage = self.dict.object(forKey: "total_pages") as! Int
+                    self.totalPage = self.dict["total_pages"] as! Int
                     if(self.pageNO==1)
                     {
-                        self.moviesArray.removeAllObjects()
-                        self.moviesArray.addObjects(from: self.dict.object(forKey: "results") as! [Any])
+                        self.moviesArray.removeAll()
+//                        self.moviesArray.append( self.dict.object(forKey: "results") as! [Any])
+//                        self.moviesArray = (self.dict.object(forKey: "results")as! [[String : Any]])
+                        self.moviesArray = self.dict["results"] as! Array
                         
+                        print(self.moviesArray);
+                        print("count= \(self.moviesArray.count)")
                     }else{
-                        self.moviesArray.addObjects(from: self.dict.object(forKey: "results") as! [Any])
-                        
+                      //  self.moviesArray.append(self.dict.object(forKey: "results") as! [[String : Any]])
+                        self.moviesArray.append(contentsOf: self.dict["results"] as! Array)
+                        print("count\(self.moviesArray.count)")
                     }
                     DispatchQueue.main.async {
                         self.collectionView.reloadData()
@@ -141,10 +150,17 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+       
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdevarfier, for: indexPath as IndexPath) as! CollectionViewCell
-        let imageUrl = constant.imageBaseUrl + ((self.moviesArray.object(at: indexPath.row)as! NSDictionary).object(forKey: "poster_path") as? String)!
-        print(imageUrl)
+
+        guard ((self.moviesArray[indexPath.row] as! [String : Any])["poster_path"]) != nil   else{
+            cell.imageView.kf.setImage(with: URL(string: "" ), placeholder: #imageLiteral(resourceName: "placeHolderImage"), options: nil, progressBlock: nil, completionHandler: nil)
+            return cell
+        }
+        
+        let imageUrl = constant.imageBaseUrl  + String(describing: (self.moviesArray[indexPath.row] as! [String : Any])["poster_path"]!)
         cell.imageView.kf.setImage(with: URL(string: imageUrl ), placeholder: #imageLiteral(resourceName: "placeHolderImage"), options: nil, progressBlock: nil, completionHandler: nil)
+        
         return cell
     }
     
@@ -163,7 +179,8 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
         let detailVC = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
-        detailVC.moviesDataArray = self.moviesArray.object(at: indexPath.row) as! NSDictionary
+        //detailVC.moviesDataArray = self.moviesArray.object(at: indexPath.row) as! NSDictionary
+        detailVC.moviesDataArray = self.moviesArray[indexPath.row] as! [String : Any]
         self.navigationController?.pushViewController(detailVC, animated: true)
         
     }
@@ -215,8 +232,8 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         self.filterButton.isEnabled=false
         searchBar.resignFirstResponder()
         isSearching=true
-        let string = searchBar.text! as NSString
-        self.searchString = string.replacingOccurrences(of: " ", with: "+") as NSString
+        let string = searchBar.text! as String
+        self.searchString = string.replacingOccurrences(of: " ", with: "+") as String
         pageNO=1;
         callWebService(pageNo: "\(pageNO)")
         
