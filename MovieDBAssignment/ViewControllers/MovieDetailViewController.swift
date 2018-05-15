@@ -59,8 +59,7 @@ class MovieDetailViewController: UIViewController {
 
         self.releaseDate.text = "Release Date: " + String(describing: self.moviesDataArray["release_date"] as! String)
         let adult = self.moviesDataArray["adult"] as! Bool
-        if(adult)
-        {
+        if(adult){
             self.adultLbl.text = "A"
         }else{
             self.adultLbl.text = "U/A"
@@ -69,7 +68,6 @@ class MovieDetailViewController: UIViewController {
             posterimageView.kf.setImage(with: URL(string: "" ), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
             return
         }
-        
         let  imageUrl = constant.imageBaseUrl + (self.moviesDataArray["backdrop_path"] as? String)!
         posterimageView.kf.setImage(with: URL(string: imageUrl ), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
         
