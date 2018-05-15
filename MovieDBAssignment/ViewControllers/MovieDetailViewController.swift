@@ -54,7 +54,9 @@ class MovieDetailViewController: UIViewController {
         self.title = self.moviesDataArray["original_title"] as? String
         self.DescriptionLbl.text = self.moviesDataArray["overview"] as? String
         self.titleLbl.text = self.moviesDataArray["original_title"] as? String
-        self.voteAverageLbl.text = "Rating: " + String(self.moviesDataArray["vote_average"] as! Int) + " / 10"
+//        self.voteAverageLbl.text = "Rating: " + String(format: "%.1f", self.moviesDataArray["vote_average"] as! NSNumber) + " / 10"
+         self.voteAverageLbl.text = "Rating: " +  String(describing: self.moviesDataArray["vote_average"] as! NSNumber) + " / 10"
+
         self.releaseDate.text = "Release Date: " + String(describing: self.moviesDataArray["release_date"] as! String)
         let adult = self.moviesDataArray["adult"] as! Bool
         if(adult)

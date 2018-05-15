@@ -68,10 +68,8 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             {
                 url =  constant.searchUrl  + (searchString as String)
             }else if(filterselected){
-                if(filter)
-                {
+                if(filter)  {
                     url =  constant.popularUrl  + "\(pageNo)"
-                    
                 }else{
                     url =  constant.topRatedUrl  + "\(pageNo)"
                 }
@@ -166,18 +164,15 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath)
     {
-        if(indexPath.row == self.moviesArray.count - 1)
-        {
-            if(pageNO<totalPage)
-            {
+        if(indexPath.row == self.moviesArray.count - 1) {
+            if(pageNO<totalPage)  {
                 pageNO = pageNO + 1
                 callWebService(pageNo: "\(pageNO)")
             }
         }
     }
     
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
-    {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)  {
         let detailVC = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
         //detailVC.moviesDataArray = self.moviesArray.object(at: indexPath.row) as! NSDictionary
         detailVC.moviesDataArray = self.moviesArray[indexPath.row] as! [String : Any]
